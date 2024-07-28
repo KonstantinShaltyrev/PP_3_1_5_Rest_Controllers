@@ -1,0 +1,9 @@
+<header th:fragment="header" id="header" class="container-fluid d-flex flex-row align-items-center justify-content-between p-3 bg-dark text-white h5">
+    <div>
+        <b id="header_current_user_email"></b> with roles: <span id="header_current_user_roles"></span>
+    </div>
+
+    <form class="logout" role="form" th:action="@{/logout}" method="post">
+        <button type="submit" class="btn btn-outline-dark active">Logout</button>
+    </form>
+</header>

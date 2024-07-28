@@ -1,0 +1,8 @@
+<div th:fragment="admin_delete_user">
+
+    <button id="deleteButton" class="btn btn-danger btn-sg" type="submit" data-bs-toggle="modal"
+            data-bs-target="#modal-delete-user"
+            th:attr="data-bs-target='#modal-delete-user'+${user.id}">Delete
+    </button>
+
+</div>

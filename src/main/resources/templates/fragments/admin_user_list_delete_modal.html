@@ -1,0 +1,64 @@
+<div th:fragment="admin_user_list_delete_modal">
+
+    <div id="modal-delete-user"
+         class="modal fade" data-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel2" aria-hidden="true">
+
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel2">Delete user</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <form role="form" id="modal-delete-form">
+                    <div class="modal-body">
+
+                        <div class="form-group text-center">
+                            <label for="form-control-delete-id" class="form-label fw-bold">ID</label>
+                            <input name="col_1" type="text" class="form-control" id="form-control-delete-id" disabled>
+                        </div>
+
+                        <div class="form-group text-center">
+                            <label for="form-control-delete-firstname" class="form-label fw-bold">First name</label>
+                            <input name="col_2" type="text" class="form-control" id="form-control-delete-firstname" disabled/>
+                        </div>
+
+                        <div class="form-group text-center">
+                            <label for="form-control-delete-lastname" class="form-label fw-bold">Last name</label>
+                            <input name="col_3" type="text" class="form-control" id="form-control-delete-lastname"  disabled/>
+                        </div>
+
+                        <div class="form-group text-center">
+                            <label for="form-control-delete-email" class="form-label fw-bold">Email</label>
+                            <input name="col_4" type="text" class="form-control" id="form-control-delete-email"  disabled/>
+                        </div>
+
+                        <div class="form-group text-center">
+                            <label for="form-control-delete-birthday" class="form-label fw-bold">Birthday</label>
+                            <input name="col_5" type="date" class="form-control" id="form-control-delete-birthday"  disabled/>
+                        </div>
+
+                        <div class="form-group text-center">
+                            <label for="form-control-delete-phone" class="form-label fw-bold">Phone number</label>
+                            <input name="col_6" type="text" class="form-control" id="form-control-delete-phone"  disabled/>
+                        </div>
+
+                        <div class="form-group text-center">
+                            <label for="form-control-delete-role-selection" class="form-label fw-bold">Role</label>
+                            <select name="roleName" class="form-control" size="2" id="form-control-delete-role-selection" disabled>
+                                <option value="ROLE_USER">USER</option>
+                                <option value="ROLE_ADMIN">ADMIN</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button id="modal-delete-form-button-close" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button id="modal-delete-form-button-delete" type="submit" class="btn btn-danger">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>

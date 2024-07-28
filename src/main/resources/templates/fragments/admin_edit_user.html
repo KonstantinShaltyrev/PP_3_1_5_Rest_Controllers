@@ -1,0 +1,8 @@
+<div th:fragment="admin_edit_user">
+
+    <button id="updateButton" class="btn btn-info btn-sg" type="submit" data-bs-toggle="modal"
+            data-bs-target="#modal-update-user"
+            th:attr="data-bs-target='#modal-update-user'+${user.id}">Edit
+    </button>
+
+</div>
