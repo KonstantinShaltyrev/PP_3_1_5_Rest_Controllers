@@ -50,26 +50,21 @@ public class CommonRestController {
 
     @PostMapping(value = "/create_user")
     public ResponseEntity<String> createUser(@Valid @RequestBody UserDto newUserDto, BindingResult bindingResult) {
-        userValidator.validate(newUserDto, bindingResult);
-        if (bindingResult.hasErrors()) {
-            HttpHeaders headers = new HttpHeaders();
-
-            for (ObjectError error : bindingResult.getAllErrors()) {
-                String fieldErrors = ((FieldError) error).getField();
-                String errorMessage = error.getDefaultMessage();
-                headers.add(fieldErrors, errorMessage);
-            }
-            return new ResponseEntity<>(headers, HttpStatus.BAD_REQUEST);
-        }
-        String roleName = newUserDto.getRoles().get(0);
-        userService.addUser(userDtoService.convertToUser(newUserDto), roleName);
-
-        return new ResponseEntity<>(HttpStatus.OK);
+        return saveUser(newUserDto, bindingResult, true);
     }
 
     @PutMapping(value = "/update_user")
     public ResponseEntity<String> updateUser(@Valid @RequestBody UserDto updatedUserDto, BindingResult bindingResult) {
-        userValidator.validate(updatedUserDto, bindingResult);
+        return saveUser(updatedUserDto, bindingResult, false);
+    }
+
+//    @PostMapping(value = "/signup")
+//    public ResponseEntity<String> signUpUser(@Valid @RequestBody UserDto newUserDto, BindingResult bindingResult) {
+//        return saveUser(newUserDto, bindingResult, true);
+//    }
+
+    private ResponseEntity<String> saveUser(UserDto userDto, BindingResult bindingResult, Boolean newUserFlag) {
+        userValidator.validate(userDto, bindingResult);
         if (bindingResult.hasErrors()) {
             HttpHeaders headers = new HttpHeaders();
 
@@ -80,8 +75,12 @@ public class CommonRestController {
             }
             return new ResponseEntity<>(headers, HttpStatus.BAD_REQUEST);
         }
-        String roleName = updatedUserDto.getRoles().get(0);
-        userService.updateUser(userDtoService.convertToUser(updatedUserDto), roleName);
+        String roleName = userDto.getRoles().get(0);
+        if (newUserFlag) {
+            userService.addUser(userDtoService.convertToUser(userDto), roleName);
+        } else {
+            userService.updateUser(userDtoService.convertToUser(userDto), roleName);
+        }
 
         return new ResponseEntity<>(HttpStatus.OK);
     }

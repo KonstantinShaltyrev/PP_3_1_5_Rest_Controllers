@@ -1,34 +1,10 @@
 package ru.preproject.controller;
 
-import jakarta.validation.Valid;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import ru.preproject.dto.UserDto;
-import ru.preproject.model.User;
-import ru.preproject.service.UserDtoService;
-import ru.preproject.service.UserService;
-import ru.preproject.util.UserValidator;
 
 @Controller
 public class AuthController {
-
-    private final UserValidator userValidator;
-    private final UserService userService;
-    private final UserDtoService userDtoService;
-
-    @Autowired
-    public AuthController(UserValidator userValidator, UserService userService, UserDtoService userDtoService) {
-        this.userValidator = userValidator;
-        this.userService = userService;
-        this.userDtoService = userDtoService;
-    }
-
 
     @GetMapping("/")
     public String redirectToLogInPage() {
@@ -41,21 +17,8 @@ public class AuthController {
     }
 
 
-
     @GetMapping("/signup")
-    public String openRegistration(ModelMap model) {
-        model.addAttribute("newUser", new UserDto());
+    public String openRegistration() {
         return "auth/signup";
-    }
-
-    @PostMapping("/signup")
-    public String performRegistration(@Valid @ModelAttribute("newUser") UserDto userDto, BindingResult bindingResult) {
-        userValidator.validate(userDto, bindingResult);
-        if (bindingResult.hasErrors()) {
-            return "auth/signup";
-        }
-
-        userService.addUser(userDtoService.convertToUser(userDto), "ROLE_USER");
-        return "redirect:/login";
     }
 }
