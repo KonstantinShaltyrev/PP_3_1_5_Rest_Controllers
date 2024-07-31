@@ -11,7 +11,6 @@ import ru.preproject.util.UserValidator;
 
 import java.security.Principal;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/rest")
@@ -35,25 +34,25 @@ public class CommonRestController {
 
     @GetMapping(value = "/admin/user_list")
     public List<UserDto> getUserList() {
-        return userService.findAll().stream().map(userDtoService::convertUser).collect(Collectors.toList());
+        return userDtoService.convertUser(userService.findAll());
     }
 
     @DeleteMapping(value = "/admin/delete_user/{id}")
     public ResponseEntity<List<UserDto>> deleteUser(@PathVariable("id") long id) {
         userService.deleteUser(id);
-        return ResponseEntity.ok(userService.findAll().stream().map(userDtoService::convertUser).collect(Collectors.toList()));
+        return ResponseEntity.ok(userDtoService.convertUser(userService.findAll()));
     }
 
     @PostMapping(value = "/admin/save_user")
     public ResponseEntity<String> createUser(@Valid @RequestBody UserDto newUserDto, BindingResult bindingResult) {
         userValidator.validate(newUserDto, bindingResult);
-        return userService.saveUser(userDtoService.convertUserDto(newUserDto), newUserDto.getRoles().get(0), bindingResult);
+        return userService.saveUser(userDtoService.convertUser(newUserDto), newUserDto.getRoles().get(0), bindingResult);
     }
 
     @PutMapping(value = "/admin/save_user")
     public ResponseEntity<String> updateUser(@Valid @RequestBody UserDto updatedUserDto, BindingResult bindingResult) {
         userValidator.validate(updatedUserDto, bindingResult);
-        return userService.saveUser(userDtoService.convertUserDto(updatedUserDto), updatedUserDto.getRoles().get(0), bindingResult);
+        return userService.saveUser(userDtoService.convertUser(updatedUserDto), updatedUserDto.getRoles().get(0), bindingResult);
     }
 }
 

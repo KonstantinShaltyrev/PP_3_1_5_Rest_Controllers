@@ -53,7 +53,7 @@ public class AuthController {
             return "auth/signup";
         }
 
-        userService.saveUser(userDtoService.convertUserDto(userDto), "ROLE_USER");
+        userService.saveUser(userDtoService.convertUser(userDto), "ROLE_USER");
         return "redirect:/login";
     }
 }

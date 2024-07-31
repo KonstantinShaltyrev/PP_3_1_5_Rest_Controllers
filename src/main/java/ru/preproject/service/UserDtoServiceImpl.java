@@ -8,6 +8,7 @@ import ru.preproject.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserDtoServiceImpl implements UserDtoService {
@@ -19,8 +20,9 @@ public class UserDtoServiceImpl implements UserDtoService {
         this.modelMapper = modelMapper;
     }
 
+
     @Override
-    public User convertUserDto(UserDto userDto) {
+    public User convertUser(UserDto userDto) {
         return modelMapper.map(userDto, User.class);
     }
 
@@ -34,4 +36,10 @@ public class UserDtoServiceImpl implements UserDtoService {
         userDto.setRoles(rolesList);
         return userDto;
     }
+
+    @Override
+    public List<UserDto> convertUser(List<User> users) {
+        return users.stream().map(this::convertUser).collect(Collectors.toList());
+    }
+
 }
