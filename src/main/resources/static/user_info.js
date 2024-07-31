@@ -1,7 +1,7 @@
 const currentUser = getCurrentUser();
 
 async function getCurrentUser() {
-    const url = 'http://localhost:8080/rest/current_user';
+    const url = 'http://localhost:8080/rest/user/current_user';
     const response = await fetch(url);
     if (response.ok) {
         return await response.json();

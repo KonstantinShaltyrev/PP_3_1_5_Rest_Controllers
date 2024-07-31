@@ -27,7 +27,7 @@ public class UserValidator implements Validator {
     public void validate(Object target, Errors errors) {
         UserDto user = (UserDto) target;
 
-        if (userService.findByEmail(user.getEmail()).isPresent() && userService.findByEmail(user.getEmail()).get().getId() != user.getId()) {
+        if (userService.findUser(user.getEmail()).isPresent() && userService.findUser(user.getEmail()).get().getId() != user.getId()) {
             errors.rejectValue("email", "", "Account with this Email already exists");
         }
     }

@@ -20,8 +20,9 @@ public class RoleServiceImpl implements RoleService {
         this.roleRepository = roleRepository;
     }
 
+
     @Override
-    public void save(Role role) {
+    public void saveRole(Role role) {
         roleRepository.save(role);
     }
 
@@ -33,22 +34,17 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Optional<Role> findByRoleName(String roleName) {
+    public Optional<Role> findRole(String roleName) {
         return roleRepository.findByRoleName(roleName);
     }
 
     @Override
-    public Optional<Role> findRoleById(long id) {
-        return roleRepository.findById(id);
-    }
-
-    @Override
-    public void delete(Role role) {
+    public void deleteRole(Role role) {
         roleRepository.delete(role);
     }
 
     @Override
-    public void deleteRoleById(long id) {
+    public void deleteRole(long id) {
         roleRepository.deleteById(id);
     }
 
@@ -56,14 +52,14 @@ public class RoleServiceImpl implements RoleService {
     public void checkRoles() {
         Role role = new Role();
 
-        if (findByRoleName("ROLE_ADMIN").isEmpty()) {
+        if (findRole("ROLE_ADMIN").isEmpty()) {
             role.setRoleName("ROLE_ADMIN");
-            save(role);
+            saveRole(role);
         }
 
-        if (findByRoleName("ROLE_USER").isEmpty()) {
+        if (findRole("ROLE_USER").isEmpty()) {
             role.setRoleName("ROLE_USER");
-            save(role);
+            saveRole(role);
         }
     }
 }

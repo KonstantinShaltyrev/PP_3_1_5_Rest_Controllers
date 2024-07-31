@@ -1,9 +1,15 @@
 package ru.preproject.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import ru.preproject.model.Role;
 import ru.preproject.model.User;
 import ru.preproject.repository.UserRepository;
@@ -26,17 +32,35 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void addUser(User user, String roleName) {
+    public void saveUser(User user, String roleName) {
         Set<Role> rolesSet = new HashSet<>();
 
         roleService.checkRoles();
         if (roleName.equals("ROLE_ADMIN")) {
-            rolesSet.add(roleService.findByRoleName("ROLE_ADMIN").get());
+            rolesSet.add(roleService.findRole("ROLE_ADMIN").get());
         }
-        rolesSet.add(roleService.findByRoleName("ROLE_USER").get());
+        rolesSet.add(roleService.findRole("ROLE_USER").get());
         user.setRoles(rolesSet);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public ResponseEntity<String> saveUser(User user, String roleName, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            HttpHeaders headers = new HttpHeaders();
+
+            for (ObjectError error : bindingResult.getAllErrors()) {
+                String fieldErrors = ((FieldError) error).getField();
+                String errorMessage = error.getDefaultMessage();
+                headers.add(fieldErrors, errorMessage);
+            }
+            return new ResponseEntity<>(headers, HttpStatus.BAD_REQUEST);
+        }
+        saveUser(user, roleName);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @Override
@@ -47,39 +71,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
+    public Optional<User> findUser(String email) {
         return userRepository.findByEmail(email);
     }
 
     @Override
-    public Optional<User> findById(long id) {
+    public Optional<User> findUser(long id) {
         return userRepository.findById(id);
     }
 
     @Override
-    @Transactional
-    public void updateUser(User user, String roleName) {
-        Set<Role> rolesSet = new HashSet<>();
-
-        if (roleName.equals("ROLE_ADMIN")) {
-            rolesSet.add(roleService.findByRoleName("ROLE_ADMIN").get());
-        }
-        rolesSet.add(roleService.findByRoleName("ROLE_USER").get());
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRoles(rolesSet);
-        userRepository.save(user);
-    }
-
-    @Override
-    public void deleteById(long id) {
+    public void deleteUser(long id) {
         userRepository.deleteById(id);
     }
 
-
     @Override
     @Transactional
-    public String findRoleName (Long id) {
-        User userById = findById(id)
+    public String findRole(Long id) {
+        User userById = findUser(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid user Id:" + id));
         List<String> currentRoles = new ArrayList<>();
 

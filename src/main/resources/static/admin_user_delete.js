@@ -18,7 +18,7 @@ pressDeleteButton.addEventListener('click', function (event) {
 
   event.preventDefault();
   const id = document.querySelector('#form-control-delete-id').value
-  const url = 'http://localhost:8080/rest/delete_user/' + id;
+  const url = 'http://localhost:8080/rest/admin/delete_user/' + id;
 
   fetch(url, {
     method: "DELETE",

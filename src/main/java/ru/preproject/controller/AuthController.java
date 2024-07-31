@@ -1,7 +1,6 @@
 package ru.preproject.controller;
 
 import jakarta.validation.Valid;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import ru.preproject.dto.UserDto;
-import ru.preproject.model.User;
 import ru.preproject.service.UserDtoService;
 import ru.preproject.service.UserService;
 import ru.preproject.util.UserValidator;
@@ -55,7 +53,7 @@ public class AuthController {
             return "auth/signup";
         }
 
-        userService.addUser(userDtoService.convertToUser(userDto), "ROLE_USER");
+        userService.saveUser(userDtoService.convertUserDto(userDto), "ROLE_USER");
         return "redirect:/login";
     }
 }

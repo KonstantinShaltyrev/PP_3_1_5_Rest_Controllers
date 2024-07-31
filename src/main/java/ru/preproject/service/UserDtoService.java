@@ -4,6 +4,6 @@ import ru.preproject.dto.UserDto;
 import ru.preproject.model.User;
 
 public interface UserDtoService {
-    User convertToUser(UserDto userDto);
-    UserDto convertToUserDto(User user);
+    User convertUserDto(UserDto userDto);
+    UserDto convertUser(User user);
 }

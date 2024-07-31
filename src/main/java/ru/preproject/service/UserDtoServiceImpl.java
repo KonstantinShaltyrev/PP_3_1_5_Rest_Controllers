@@ -19,12 +19,14 @@ public class UserDtoServiceImpl implements UserDtoService {
         this.modelMapper = modelMapper;
     }
 
-    public User convertToUser(UserDto userDto) {
+    @Override
+    public User convertUserDto(UserDto userDto) {
         return modelMapper.map(userDto, User.class);
     }
 
-    public UserDto convertToUserDto(User user) {
-        UserDto userDto;
+    @Override
+    public UserDto convertUser(User user) {
+        UserDto userDto = new UserDto();
         List<String> rolesList = new ArrayList<>();
 
         userDto = modelMapper.map(user, UserDto.class);

@@ -1,12 +1,8 @@
 package ru.preproject.controller;
 
 import jakarta.validation.Valid;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import ru.preproject.dto.UserDto;
 import ru.preproject.service.UserDtoService;
@@ -32,58 +28,32 @@ public class CommonRestController {
     }
 
 
-    @GetMapping(value = "/current_user")
+    @GetMapping(value = "/user/current_user")
     public UserDto getCurrentUser(Principal principal) {
-        return userDtoService.convertToUserDto(userService.findByEmail(principal.getName()).get());
+        return userDtoService.convertUser(userService.findUser(principal.getName()).get());
     }
 
-    @GetMapping(value = "/user_list")
+    @GetMapping(value = "/admin/user_list")
     public List<UserDto> getUserList() {
-        return userService.findAll().stream().map(userDtoService::convertToUserDto).collect(Collectors.toList());
+        return userService.findAll().stream().map(userDtoService::convertUser).collect(Collectors.toList());
     }
 
-    @DeleteMapping(value = "/delete_user/{id}")
+    @DeleteMapping(value = "/admin/delete_user/{id}")
     public ResponseEntity<List<UserDto>> deleteUser(@PathVariable("id") long id) {
-        userService.deleteById(id);
-        return ResponseEntity.ok(userService.findAll().stream().map(userDtoService::convertToUserDto).collect(Collectors.toList()));
+        userService.deleteUser(id);
+        return ResponseEntity.ok(userService.findAll().stream().map(userDtoService::convertUser).collect(Collectors.toList()));
     }
 
-    @PostMapping(value = "/create_user")
+    @PostMapping(value = "/admin/save_user")
     public ResponseEntity<String> createUser(@Valid @RequestBody UserDto newUserDto, BindingResult bindingResult) {
         userValidator.validate(newUserDto, bindingResult);
-        if (bindingResult.hasErrors()) {
-            HttpHeaders headers = new HttpHeaders();
-
-            for (ObjectError error : bindingResult.getAllErrors()) {
-                String fieldErrors = ((FieldError) error).getField();
-                String errorMessage = error.getDefaultMessage();
-                headers.add(fieldErrors, errorMessage);
-            }
-            return new ResponseEntity<>(headers, HttpStatus.BAD_REQUEST);
-        }
-        String roleName = newUserDto.getRoles().get(0);
-        userService.addUser(userDtoService.convertToUser(newUserDto), roleName);
-
-        return new ResponseEntity<>(HttpStatus.OK);
+        return userService.saveUser(userDtoService.convertUserDto(newUserDto), newUserDto.getRoles().get(0), bindingResult);
     }
 
-    @PutMapping(value = "/update_user")
+    @PutMapping(value = "/admin/save_user")
     public ResponseEntity<String> updateUser(@Valid @RequestBody UserDto updatedUserDto, BindingResult bindingResult) {
         userValidator.validate(updatedUserDto, bindingResult);
-        if (bindingResult.hasErrors()) {
-            HttpHeaders headers = new HttpHeaders();
-
-            for (ObjectError error : bindingResult.getAllErrors()) {
-                String fieldErrors = ((FieldError) error).getField();
-                String errorMessage = error.getDefaultMessage();
-                headers.add(fieldErrors, errorMessage);
-            }
-            return new ResponseEntity<>(headers, HttpStatus.BAD_REQUEST);
-        }
-        String roleName = updatedUserDto.getRoles().get(0);
-        userService.updateUser(userDtoService.convertToUser(updatedUserDto), roleName);
-
-        return new ResponseEntity<>(HttpStatus.OK);
+        return userService.saveUser(userDtoService.convertUserDto(updatedUserDto), updatedUserDto.getRoles().get(0), bindingResult);
     }
 }
 

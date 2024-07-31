@@ -10,7 +10,7 @@ createNewUserForm.addEventListener('submit', async function (event) {
     const birthday = document.querySelector('#form-control-birthday').value
     const role = document.querySelector('#form-control-role-selection').value
 
-    const url = 'http://localhost:8080/rest/create_user';
+    const url = 'http://localhost:8080/rest/admin/save_user';
 
     const response = await fetch(url, {
         method: "POST",

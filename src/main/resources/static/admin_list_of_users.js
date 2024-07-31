@@ -1,5 +1,5 @@
 async function getUserList() {
-    const url = 'http://localhost:8080/rest/user_list';
+    const url = 'http://localhost:8080/rest/admin/user_list';
     let response = await fetch(url);
     if (response.ok) {
         return await response.json();
