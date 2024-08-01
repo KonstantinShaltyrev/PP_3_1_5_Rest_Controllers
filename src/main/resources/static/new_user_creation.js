@@ -13,7 +13,7 @@
         const birthday = document.querySelector('#signup-form-birthday').value
         const role = 'ROLE_USER'
 
-        const url = 'http://localhost:8080/rest/admin/save_user';
+        const url = 'http://localhost:8080/admin/save_user';
 
         const response = await fetch(url, {
             method: "POST",

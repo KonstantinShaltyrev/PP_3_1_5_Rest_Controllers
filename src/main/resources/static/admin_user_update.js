@@ -24,7 +24,7 @@ updateUserForm.addEventListener('submit', async function (event) {
     const birthday = document.querySelector('#form-control-update-birthday').value
     const role = document.querySelector('#form-control-update-role-selection').value
 
-    const url = 'http://localhost:8080/rest/admin/save_user';
+    const url = 'http://localhost:8080/admin/save_user';
 
     const response = await fetch(url, {
         method: "PUT",
