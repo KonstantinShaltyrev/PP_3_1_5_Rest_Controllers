@@ -13,23 +13,8 @@ import java.security.Principal;
 @Controller
 @RequestMapping(value = "/user")
 public class UserController {
-    private final UserService userService;
-    private final UserDtoService userDtoService;
-
-    public UserController(UserService userService, UserDtoService userDtoService) {
-        this.userService = userService;
-        this.userDtoService = userDtoService;
-    }
-
-
     @GetMapping
     public String printUser() {
         return "user/user_panel";
-    }
-
-    @GetMapping(value = "/user_info")
-    @ResponseBody
-    public UserDto getCurrentUser(Principal principal) {
-        return userDtoService.convertUser(userService.findUser(principal.getName()).get());
     }
 }
